@@ -18,7 +18,7 @@ class Reservation(core_models.TimeStampedModel):
     )
 
     status = models.CharField(
-        max_length=12, choices=STATUS_CHOICES, default=STATUS_PENDING
+        max_length=12, choices=STATUS_CHOICES, #default=STATUS_PENDING # 시드에서 pending만 고정으로 먹음
     )
     check_in = models.DateField()
     check_out = models.DateField()
@@ -34,7 +34,7 @@ class Reservation(core_models.TimeStampedModel):
     
     def in_progress(self):
         now = timezone.now().date()
-        return self.check_in < now < self.check_out
+        return self.check_in <= now <= self.check_out
 
     in_progress.boolean = True
 

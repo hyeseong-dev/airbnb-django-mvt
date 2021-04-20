@@ -95,3 +95,8 @@ class Room(core_models.TimeStampedModel):
         all_reviews = self.reviews.all()
         all_ratings = [review.rating_average() for review in all_reviews]
         return 0
+
+    def save(self, *args, **kwargs):
+        # self.city = str.capitalize(self.city)
+        self.city = self.city.title() # ex Las Vegas
+        super().save(*args, **kwargs)

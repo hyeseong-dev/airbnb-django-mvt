@@ -1,12 +1,12 @@
 import random
 from django.core.management.base import BaseCommand
 
-from django.contrib.admin.utils  import flatten # 2차원 배열 안의 값을 가져올 때 사용 가능
-from django_seed                 import Seed
+from django.contrib.admin.utils import flatten  # 2차원 배열 안의 값을 가져올 때 사용 가능
+from django_seed import Seed
 
-from lists                       import models as list_models
-from rooms                       import models as room_models
-from users                       import models as user_models
+from lists import models as list_models
+from rooms import models as room_models
+from users import models as user_models
 
 NAME = "lists"
 

@@ -1,0 +1,30 @@
+{
+  "name": "airbnb-django-mvt",
+  "version": "1.0.0",
+  "description": "Cloning Airbnb with Python, Django, Tailwind and more...🐱‍👓🐱‍🚀✔\r written by hyeseong lee",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "autoprefixer": "^10.2.4",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-postcss": "^9.0.0",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^5.0.0",
+    "postcss": "^8.2.6",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.0.3"
+  },
+  "scripts": {
+    "css": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyeseong-dev/airbnb-django-mvt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hyeseong-dev/airbnb-django-mvt/issues"
+  },
+  "homepage": "https://github.com/hyeseong-dev/airbnb-django-mvt#readme"
+}

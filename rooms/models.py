@@ -1,8 +1,10 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django_countries.fields import CountryField
 from core import models as core_models
 from users import models as user_models
+from cal import Calendar
 
 
 class AbstractItem(core_models.TimeStampedModel):
@@ -89,8 +91,19 @@ class Room(core_models.TimeStampedModel):
     facilities = models.ManyToManyField("Facility", related_name="rooms", blank=True)
     house_rules = models.ManyToManyField("HouseRule", related_name="rooms", blank=True)
 
+    class Meta:
+        db_table = "rooms"
+
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # self.city = self.city[0].upper()+self.city[1:] 코드가 길어지는 문제
+        self.city = self.city.title()  # str의 title() 메소드를 사용하여 각 단어의 첫글자를 대문자로 만듬
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("rooms:detail", kwargs={"pk": self.pk})
 
     def total_rating(self):
         all_reviews = self.reviews.all()
@@ -102,16 +115,29 @@ class Room(core_models.TimeStampedModel):
         return 0
 
     def first_photo(self):
-        photo = self.photos.all()[:1]
-        return photo.file.url
+        try:
+            (photo,) = self.photos.all()[:1]
+            return photo.file.url
+        except ValueError:
+            return None
 
-    class Meta:
-        db_table = "rooms"
+    def get_next_four_photos(self):
+        photos = self.photos.all()[1:5]
+        return photos
 
-    def save(self, *args, **kwargs):
-        # self.city = str.capitalize(self.city)
-        self.city = self.city.title()  # ex Las Vegas와 같이 두 단어로 이루어진 문자열을 처리함
-        super().save(*args, **kwargs)
+    def get_beds(self):
+        if self.beds == 1:
+            return "1 bed"
+        else:
+            return f"{self.beds} beds"
 
-    def get_absolute_url(self):
-        return reverse("rooms:detail", kwargs={"pk": self.pk})
+    def get_calendars(self):
+        now = timezone.now()
+        this_year = now.year
+        this_month = now.month
+        next_month = this_month + 1
+        if this_month == 12:
+            next_month = 1
+        this_month_cal = Calendar(this_year, this_month)
+        next_month_cal = Calendar(this_year, next_month)
+        return [this_month_cal, next_month_cal]

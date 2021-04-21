@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
+from django.shortcuts import reverse
 from django.template.loader import render_to_string
 
 
@@ -41,20 +42,25 @@ class User(AbstractUser):
         (LOGIN_KAKAO, "Kakao"),
     )
 
-    avatar = models.ImageField(upload_to="avatars", blank=True)
+    avatar = models.ImageField(
+        upload_to="avatars", blank=True, default="avatars/profile_female.jpeg"
+    )
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
     bio = models.TextField(blank=True, default="")
     birthdate = models.DateField(null=True, blank=True)
     language = models.CharField(
         choices=LANGUAGE_CHOICES, max_length=2, blank=True, default=LANGUAGE_KOREAN
     )
-    currency = models.CharField(choices=LANGUAGE_CHOICES, max_length=2, blank=True)
+    currency = models.CharField(choices=CURRENCY_CHOICES, max_length=5, blank=True)
     superhost = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
     email_secret = models.CharField(max_length=20, default="", blank=True)
     login_method = models.CharField(
         max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL
     )
+
+    def get_absolute_url(self):
+        return reverse("users:profile", kwargs={"pk": self.pk})
 
     def verify_email(self):
         if self.email_verified is False:

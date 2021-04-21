@@ -98,8 +98,15 @@ class Room(core_models.TimeStampedModel):
         if len(all_reviews) > 0:
             for review in all_reviews:
                 all_ratings += review.rating_average()
-            return all_ratings / len(all_reviews)
-        return 0  # 평가가 이루어 지지 않았을 경우 전체 평점은 0
+            return round(all_ratings / len(all_reviews), 2)
+        return 0
+
+    def first_photo(self):
+        photo = self.photos.all()[:1]
+        return photo.file.url
+
+    class Meta:
+        db_table = "rooms"
 
     def save(self, *args, **kwargs):
         # self.city = str.capitalize(self.city)
